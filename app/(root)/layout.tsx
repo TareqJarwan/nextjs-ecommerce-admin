@@ -18,7 +18,6 @@ const SetupLayout = async ({
     });
 
     if (store) redirect(`/${store.id}`);
-    else redirect(`/`);
 
     return (
         <>

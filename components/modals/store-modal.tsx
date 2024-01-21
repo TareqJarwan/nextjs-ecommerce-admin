@@ -16,21 +16,23 @@ import { useStoreModal } from "@/hooks/use-store-modal";
 
 const formSchema = z.object({
     name: z.string().min(1)
-})
+});
+
+type StoreModalFormValues = z.infer<typeof formSchema>;
 
 const StoreModal = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const { isOpen, onClose } = useStoreModal();
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<StoreModalFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: ''
         }
     });
 
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const onSubmit = async (values: StoreModalFormValues) => {
         try {
             setIsLoading(true);
 

@@ -73,7 +73,10 @@ const StoreSwitcher = ({
             <PopoverContent className="w-[200px] p-0">
                 <Command>
                     <CommandList>
-                        <CommandInput placeholder="Search store..." autoComplete="none" />
+                        <CommandInput
+                            placeholder="Search store..."
+                            autoComplete="off"
+                        />
                         <CommandEmpty>No store found.</CommandEmpty>
                         <CommandGroup heading='Stores'>
                             {formattedItems.map(store => (
