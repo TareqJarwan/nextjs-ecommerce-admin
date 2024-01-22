@@ -3,6 +3,41 @@ import { NextResponse } from "next/server";
 
 import db from "@/lib/db";
 
+export async function GET(
+    req: Request,
+    { params }: { params: { storeId: string } }
+) {
+    try {
+        const { storeId } = params;
+
+        if (!storeId) {
+            return new NextResponse("Store id is required", { status: 400 });
+        }
+
+        const store = await db.store.findUnique({
+            where: {
+                id: storeId,
+            }
+        });
+
+        if (!store) {
+            return new NextResponse("Unauthorized", { status: 405 });
+        }
+
+        const billboards = await db.billboard.findMany({
+            where: {
+                storeId
+            }
+        });
+
+        return NextResponse.json(billboards);
+
+    } catch (error) {
+        console.log("[BILLBOARDS_GET]", error);
+        return new NextResponse('Internal Error', { status: 500 });
+    }
+}
+
 export async function POST(
     req: Request,
     { params }: { params: { storeId: string } }
@@ -25,7 +60,7 @@ export async function POST(
             return new NextResponse('Image URL is required', { status: 400 })
         }
 
-        if (!params.storeId) {
+        if (!storeId) {
             return new NextResponse("Store id is required", { status: 400 });
         }
 

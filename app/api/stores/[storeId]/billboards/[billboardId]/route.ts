@@ -3,6 +3,46 @@ import { NextResponse } from "next/server";
 
 import db from "@/lib/db";
 
+export async function GET(
+    req: Request,
+    { params }: { params: { storeId: string, billboardId: string } }
+) {
+    try {
+        const { storeId, billboardId } = params;
+
+        if (!storeId) {
+            return new NextResponse("Store id is required", { status: 400 });
+        }
+
+        if (!billboardId) {
+            return new NextResponse("Billboard id is required", { status: 400 });
+        }
+
+        const store = await db.store.findUnique({
+            where: {
+                id: storeId,
+            }
+        });
+
+        if (!store) {
+            return new NextResponse("Unauthorized", { status: 405 });
+        }
+
+        const billboards = await db.billboard.findFirst({
+            where: {
+                id: billboardId,
+                storeId
+            }
+        });
+
+        return NextResponse.json(billboards);
+
+    } catch (error) {
+        console.log("[BILLBOARDS_GET]", error);
+        return new NextResponse('Internal Error', { status: 500 });
+    }
+}
+
 export async function PATCH(
     req: Request,
     { params }: { params: { storeId: string, billboardId: string } }

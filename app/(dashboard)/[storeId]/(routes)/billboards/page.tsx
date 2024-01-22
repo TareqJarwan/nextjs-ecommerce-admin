@@ -1,5 +1,8 @@
 
-import BillboardClient from "./components/billboard-clinet";
+import { format } from 'date-fns';
+
+import BillboardClient from "./components/clinet";
+import { BillboardColumn } from "./components/columns";
 
 import { getBillboards } from "@/actions/get-billboards";
 
@@ -16,12 +19,16 @@ const BillboardsPage: React.FC<BillboardsPageProps> = async ({
 }) => {
     const billboards = await getBillboards(params.storeId);
 
-    console.log("first", billboards)
+    const formattedBillboard: BillboardColumn[] = billboards.map(item => ({
+        id: item.id,
+        label: item.label,
+        createdAt: format(item?.createdAt, 'MMMM do, yyyy')
+    }));
 
     return (
         <div className="flex-col">
             <div className="flex-1 space-y-4 p-8 pb-6">
-                <BillboardClient data={billboards} />
+                <BillboardClient data={formattedBillboard} />
             </div>
         </div>
     );
