@@ -1,21 +1,13 @@
-import { redirect } from "next/navigation";
-import { UserButton, auth } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 
 import MainNav from "@/components/main-nav";
 import StoreSwitcher from "@/components/store-switcher";
+import { ThemeToggler } from "@/components/theme-toggle";
 
-import db from "@/lib/db";
+import { getStores } from "@/actions/get-stores";
 
 const Navbar = async () => {
-    const { userId } = auth();
-
-    if (!userId) redirect('/sign-in');
-
-    const stores = await db.store.findMany({
-        where: {
-            userId
-        }
-    })
+    const stores = await getStores();
 
     return (
         <div className="border-b">
@@ -25,6 +17,7 @@ const Navbar = async () => {
                 <MainNav className="mx-6" />
 
                 <div className="ml-auto flex items-center space-x-4">
+                    <ThemeToggler />
                     <UserButton afterSignOutUrl="/" />
                 </div>
             </div>
