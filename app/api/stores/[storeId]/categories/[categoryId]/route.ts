@@ -32,6 +32,9 @@ export async function GET(
             where: {
                 id: categoryId,
                 storeId
+            },
+            include: {
+                billboard: true
             }
         });
 
